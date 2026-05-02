@@ -1,0 +1,6 @@
+/minitang
+/minitang-tiny
+/dist/
+*.test
+*.out
+.DS_Store

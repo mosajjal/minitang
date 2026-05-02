@@ -1,0 +1,21 @@
+[Unit]
+Description=minitang Tang protocol per-connection service
+Documentation=https://github.com/mosajjal/minitang
+Requires=minitang.socket
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/minitang /var/db/minitang
+StandardInput=socket
+StandardOutput=socket
+StandardError=journal
+DynamicUser=yes
+ReadOnlyPaths=/var/db/minitang
+ProtectSystem=strict
+ProtectHome=yes
+PrivateDevices=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM

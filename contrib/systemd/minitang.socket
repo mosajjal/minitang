@@ -1,0 +1,10 @@
+[Unit]
+Description=minitang Tang protocol socket
+Documentation=https://github.com/mosajjal/minitang
+
+[Socket]
+ListenStream=80
+Accept=yes
+
+[Install]
+WantedBy=sockets.target
