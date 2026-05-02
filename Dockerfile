@@ -1,15 +1,15 @@
-# Build stage: TinyGo for the smallest static binary.
-FROM tinygo/tinygo:0.41.0 AS build
+# Build stage: stdgo for portable cross-arch builds. Produces a static
+# CGO-disabled binary that works on alpine without glibc.
+FROM golang:1.24-alpine AS build
 WORKDIR /src
 COPY go.mod ./
 COPY *.go ./
-RUN tinygo build -opt=z -no-debug -o /minitang .
+ENV CGO_ENABLED=0
+RUN go build -trimpath -ldflags="-s -w" -o /src/minitang .
 
-# socat for the listening socket; busybox for keygen utilities (openssl etc.
-# are not bundled — generate keys on the host or via init container).
 FROM alpine:3.20
 RUN apk add --no-cache socat ca-certificates
-COPY --from=build /minitang /usr/bin/minitang
+COPY --from=build /src/minitang /usr/bin/minitang
 COPY contrib/keygen.sh /usr/bin/minitang-keygen
 RUN chmod +x /usr/bin/minitang-keygen
 
